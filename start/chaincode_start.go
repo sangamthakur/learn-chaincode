@@ -36,23 +36,22 @@ func main() {
 
 // Init resets all the things
 func (t *SimpleChaincode) Init(stub shim.ChaincodeStubInterface, function string, args []string) ([]byte, error) {
-	if len(args) != 1 {
-		return nil, errors.New("Incorrect number of arguments. Expecting 1")
-	}
-
-    err := stub.PutState("Hello_SKT", []byte(args[0]))
-    if err != nil {
-    return nil, err
+    if len(args) != 1 {
+        return nil, errors.New("Incorrect number of arguments. Expecting 1")
     }
 
-	return nil, nil
-}
+    err := stub.PutState("hello_world", []byte(args[0]))
+    if err != nil {
+        return nil, err
+    }
 
+    return nil, nil
+}
 // Invoke is our entry point to invoke a chaincode function
 func (t *SimpleChaincode) Invoke(stub shim.ChaincodeStubInterface, function string, args []string) ([]byte, error) {
-	fmt.Println("invoke is running " + function)
+    fmt.Println("invoke is running " + function)
 
-	// Handle different functions
+    // Handle different functions
     if function == "init" {
         return t.Init(stub, "init", args)
     } else if function == "write" {
@@ -60,20 +59,19 @@ func (t *SimpleChaincode) Invoke(stub shim.ChaincodeStubInterface, function stri
     }
     fmt.Println("invoke did not find func: " + function)
 
-	return nil, errors.New("Received unknown function invocation: " + function)
+    return nil, errors.New("Received unknown function invocation")
 }
-
 // Query is our entry point for queries
 func (t *SimpleChaincode) Query(stub shim.ChaincodeStubInterface, function string, args []string) ([]byte, error) {
-	fmt.Println("query is running " + function)
+    fmt.Println("query is running " + function)
 
- // Handle different functions
+    // Handle different functions
     if function == "read" {                            //read a variable
         return t.read(stub, args)
     }
     fmt.Println("query did not find func: " + function)
 
-	return nil, errors.New("Received unknown function query: " + function)
+    return nil, errors.New("Received unknown function query")
 }
 //WRITE FUNCTION ADDED
 func (t *SimpleChaincode) write(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
